@@ -1,0 +1,38 @@
+---
+- name: Deploy CloudOps Pipeline to Kubernetes
+  hosts: local
+  gather_facts: false
+
+  vars:
+    namespace: cloudops
+    deployment_name: cloudops-pipeline
+    container_name: cloudops-pipeline
+    image_name: your-dockerhub-user/cloudops-pipeline
+    image_tag: latest
+
+  tasks:
+    - name: Apply Kubernetes namespace
+      ansible.builtin.command:
+        cmd: kubectl apply -f k8s/namespace.yml
+        chdir: "{{ playbook_dir }}/.."
+      changed_when: true
+
+    - name: Apply Kubernetes manifests
+      ansible.builtin.command:
+        cmd: kubectl apply -f k8s/
+        chdir: "{{ playbook_dir }}/.."
+      changed_when: true
+
+    - name: Update deployment image
+      ansible.builtin.command:
+        cmd: >
+          kubectl set image deployment/{{ deployment_name }}
+          {{ container_name }}={{ image_name }}:{{ image_tag }}
+          -n {{ namespace }}
+      changed_when: true
+
+    - name: Wait for rollout to finish
+      ansible.builtin.command:
+        cmd: kubectl rollout status deployment/{{ deployment_name }} -n {{ namespace }} --timeout=120s
+      changed_when: false
+

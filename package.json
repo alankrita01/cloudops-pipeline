@@ -1,0 +1,24 @@
+{
+  "name": "cloudops-pipeline",
+  "version": "1.0.0",
+  "description": "A sample DevOps project using Jenkins, Docker, Kubernetes, AWS, and Ansible.",
+  "main": "app/server.js",
+  "scripts": {
+    "start": "node app/server.js",
+    "test": "node --test app/server.test.js"
+  },
+  "keywords": [
+    "jenkins",
+    "docker",
+    "kubernetes",
+    "aws",
+    "ansible",
+    "devops"
+  ],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  }
+}
+
